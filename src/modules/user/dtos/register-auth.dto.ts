@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { UserRoles } from "../enums"; 
 
 export class RegisterDto {
-    @ApiProperty({ required: true, example: 'exam' })
+    @ApiProperty({ required: true, example: 'tom' })
     @IsString()
     name: string;
     
@@ -11,11 +11,11 @@ export class RegisterDto {
     @IsEnum(UserRoles)
     role?: UserRoles; 
 
-    @ApiProperty({ required: true, example: 'exam@gmail.com' })
+    @ApiProperty({ required: true, example: 'tom@gmail.com' })
     @IsEmail()
     email: string;
     
-    @ApiProperty({ required: true, example: 'exam123' })
+    @ApiProperty({ required: true, example: 'tom123' })
     @IsString()
     @MinLength(4)
     @MaxLength(12)
