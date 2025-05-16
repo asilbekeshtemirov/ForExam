@@ -12,7 +12,7 @@ export class User extends Model {
   @Column({})
   email: string;
 
-  @Column({ allowNull: true })
+  @Column({ allowNull: false })
   password: string;
 
 }
