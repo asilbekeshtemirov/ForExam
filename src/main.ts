@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { AuthService } from './modules';
 import { ProductService } from './modules'; 
 
 async function bootstrap() {
@@ -34,11 +33,8 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, documentFactory);
 
-  const authService = app.get(AuthService);
   const productService = app.get(ProductService);
 
-  await authService.setAdmin();
-  await productService.seedProducts();
 
   let Port = process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3000;
   await app.listen(Port, () => {
