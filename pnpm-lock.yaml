@@ -44,6 +44,9 @@ importers:
       coverage:
         specifier: ^0.4.1
         version: 0.4.1
+      multer:
+        specifier: 1.4.5-lts.2
+        version: 1.4.5-lts.2
       pg:
         specifier: ^8.15.6
         version: 8.16.0

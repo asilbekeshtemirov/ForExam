@@ -1,8 +1,48 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { AuthService } from './modules';
+import { ProductService } from './modules'; 
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+
+  app.setGlobalPrefix('/api');
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+    prefix: 'v',
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: false,
+      transform: true,
+    }),
+  );
+
+  const config = new DocumentBuilder()
+    .setTitle('User Api')
+    .setDescription("Crud for user")
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .build();
+
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('doc', app, documentFactory);
+
+  const authService = app.get(AuthService);
+  const productService = app.get(ProductService);
+
+  await authService.setAdmin();
+  await productService.seedProducts();
+
+  let Port = process.env.APP_PORT ? parseInt(process.env.APP_PORT) : 3000;
+  await app.listen(Port, () => {
+    console.log(`http://localhost:${Port}/doc`);
+  });
 }
 bootstrap();

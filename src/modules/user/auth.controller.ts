@@ -1,9 +1,27 @@
-import { Injectable } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { RegisterDto } from "./dtos";
+import { LoginDto } from "./dtos";
+import { Protected } from "src/decorators/protected.decorator";
+import { Roles } from "src/decorators/role.decorator";
+import { UserRoles } from "./enums";
 
-@Injectable()
+@Controller('auth')
 export class AuthController {
-    constructor(){}
+    constructor(private service:AuthService){}
 
+    @Post('register')
+    @Protected(false)
+    @Roles([UserRoles.ADMIN, UserRoles.USER])
+    async register(@Body() payload:RegisterDto){
+        return await this.service.register(payload)
+    }
 
-    async 
+    @Post('login')
+    @Protected(false)
+    @Roles([UserRoles.ADMIN, UserRoles.USER])
+    async login(@Body() payload:LoginDto){
+        return await this.service.login(payload)
+    }
+
 }
